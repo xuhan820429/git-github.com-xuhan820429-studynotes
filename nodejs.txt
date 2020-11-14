@@ -1,0 +1,95 @@
+
+		nodejs tutorial
+- in vscode, for autocomplete, under project folder run  npm i -S @types/node
+- you can cancel the node process by ctrl + c
+#########################################################################################################
+
+Tutorial: nodejs fundamental
+
+1. nodejs is an environment to parse the js to run on computer
+
+2. nodejs Global object:
+
+	- In browser, the global object is "windows"
+	- In computer, the global object is "global"
+	- you can ignore the global keyword in js
+
+3. module & require
+	- nodejs (module & require) like the ES6 (module & import)
+	- implementation guides:
+		- create a module
+			for example: info.js
+			
+				const name = ['han', 'xu', 'age']
+				const age = [21, 22, 32]
+				module.exports = { name, age }
+				
+				module use "module.exports" as the objects it can export to the outside.
+		- require modules: in your js file, you can require the modules and assign the export objects to the local variables.
+			for example:
+				
+				const info = require('./modules/info')
+				console.log(info)
+				const { age, name } = require('./modules/info')
+				console.log(age)
+				console.log(name)
+		- require system modules:
+			const os = require('os');
+			
+4.use raw nodejs to create server
+
+const http = require('http')
+const server = http.createServer((req, res) => {
+    console.log('req')
+})
+server.listen(3333, 'localhost', () => {
+    console.log('start')
+})
+
+************************************************************************************
+	NPM: nodejs package manager :  it is used to manage the nodejs project and its dependencies
+	
+1. create a nodejs project
+	- npm init
+		- it will add the package.json file in the project folder
+		- package.json is the project configuration file, and it contains the dependencies information
+		
+2. add dependencies globally
+	- npm i -g xxxx
+		- it will install the xxxx package globally, so all other project can use it as well
+		
+3. add dependencies locally
+	- npm i xxxx
+		- it will install the xxxx locally, and save the dependencies in the package.json file
+
+4. install a third party project
+	- npm i
+		- when you want to work on a third party prject fetched from github, you download the codes in the local
+		- navigate to the folder, and you find the file package.json
+		- run the command "npm i", then it will install all dependencies in the package.json, and all moduels files go in node_module folder
+
+ 
+************************************************************************************
+	ExpressJS framework 
+	
+//require express module
+const express = require('express');
+const resolve = require('path').resolve;
+
+
+//create the app obj
+const app = express();
+
+app.listen(3333, () => {
+    console.log(`server start on port 3333`)
+})
+
+app.get("/", (req, res) => {
+    let path = resolve('./../views/hello.html')
+    res.sendFile(path)
+})
+
+app.use((req, res) => {
+    let path = resolve('./../views/error.html')
+    res.sendFile(path)
+})	

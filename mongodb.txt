@@ -1,0 +1,54 @@
+
+1. MongoDB is NoSQL DB
+
+   NoSQL db is json-document like db, and it is not RDBMS, and it dont has table structures, and it dont support joint.
+
+2. Download and install MongoDB community version, and use the VSCode for MongoDB plugin
+
+3. In MongoDB
+	-What is DB: (group of collections)
+	DB is a physical location for collection
+	DB can has many collections
+	-What is Collection (group of documents)
+	Collection is a group of MongDB documents
+    collection is sorta table ,without joint and schema definition
+	-What is documents: (set of key-value pairs)
+	
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+MongoDB definitions:
+
+Document:
+	- It is a simple json key-value pair data
+	- Document can have any data types (valid MongoDB data types)
+	- Document use the user defined schema and it is not static or fixed, and different documents in a collection can use different schema
+	- MongoDB will automatically add a key "_id" on each document.
+	
+	example:
+	{
+		"_id":<uuid>,
+		"firstname":"xu",
+		"lastname":"han",
+		"email":"xxx@gmail.com",
+	}
+	
+	{
+		"_id":<uuid>,
+		"firstname":"xu",
+		"lastname":"han",
+		"email":"xxx@gmail.com",
+		"address":"dddd"
+	}
+
+Collections:
+	- It is a group of documents
+	- It can have any number of documents
+	- Collection dont enforce schema so:
+		- Documents can have any dynamic schemas
+		- Documents can be same or different
+	- Collection dont have joint concept, but can use Aggregation for joint
+	
+Database:
+	-one or more collections become database
+	

@@ -1,0 +1,1848 @@
+Welcome123
+
+Tomato#321
+
+
+**Tutorial Default folder structure and boot process
+
+1.ece folder
+	-end to end test script in this folder		
+	-Protractor framework is used to run endtoend tests
+	-app.po.ts -> protractor file which will have po file
+	-app.e2e-spec.ts file
+		- e2e means the script is end to end sripts
+		- spec means this script is a test script
+
+2.node_modules
+	-the folder contains all modules and libraries
+	-not for dev
+
+3.src (folder for all source code, and configurations)
+	-app folder contains all components, modules, services, directives, pipes,etc
+		-app.component.ts (when you see component, this is a component)
+		-app.module.ts (when you see module, this is a module)
+		-app.service.ts (when you see service, this is a service)
+		-app.component.sepc.ts (when you see spec, this is a unit test script)
+	-assets: contains resources
+		-styles
+		-icons
+		-imgs
+	-env (contains the environments configuration files for dev, test, sit, prd)
+		
+	-ployfills (when the browser is outdated, polyfills will add ES9 function)
+	
+	
+	################################
+	Booting process
+	-main.ts - booting the angular app
+		-This is first file angular to check, and load to start a angular app.
+		-We need at least on module in this file to load
+		-The default module in this file is AppModule
+		-method bootstrapModule is the one to load the Module and start the application
+		-we can replace the default AppModule to user defined module
+	-test.ts - unit test file to test main.ts
+	################################
+	-stype.css
+		global css 
+4.angular.json
+	this is the file for all the configuration of our angular project
+	-environment configuration included
+
+5.karma.conf.json
+	-Karma runner for running our unit test scripts
+	-configure our test cript
+6.tsconfig.json 
+	-configuration about how to build and compile the app
+
+7.tsling.json
+	-coniguration about linking and coding standard
+
+8. package.json (usually use for development )
+	-This json script is used to configure the build pipelines
+	it contains ("name", "scripts", "dependencies", "devDependencies")
+	-"scripts" : it define the script name for the command [npm run]
+		for example:
+		"start" : "ng serve"
+		so, when you run:
+		[npm start] in the cli
+		it means 
+		[ng serve]
+		PS: you can add custom script name in this section for the build pipleline in bamboo, for example ("start:prod" : "ng serve --configuraton prod")
+		
+	--"dependencies": it contains all the external dependencies you need for the app.
+		-after you install a new package, the dependency will be added in there
+			for example: to install bootstrap 4 in the current project
+			1) run npm command [npm i @ng-bootstrap/ng-bootstrap]
+			2) after the install is done, check the package.json, and the entry ["@ng-bootstrap/ng-bootstrap": "^7.0.0"] is added
+
+	***PS: when you fetch a js project from git, and you want to install it, 
+		   you just need to go to the project root folder, and run npm install.
+		   Then, it will download all the dependencies, and setup all the configurations.
+9. package-lock.json
+	when you specify the dependencies in the package.json, the package-lock.json will resolved all the sub dependencies and will contains all the detail configurations for production.
+	
+	
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+	
+	
+**Tutorial Angular CLI 
+
+1) ng --version 
+	-Check the insalled angular cli version
+
+2) ng new <project-name>
+	-Create a new project
+	
+3) ng g <component|service|module|pipe> <name>  (generate a component, module, service, pipe, etc)
+	- component [ng g component component/component-name]
+	- service   [ng g service service/service-name]
+	- module    [ng g module module/module-name]
+	- pipe     [ng g pipe pipe/pipe-name]
+
+4) ng serve (it use to compile the application)
+	- (by default the port is 4200)
+	- (can specify port by --port): ng serve --port 1111
+
+5) ng test
+	- this cli will run over all the unit tests in project
+	- unit tests are ran by "Karma runner"
+	- unit tests are written by "jasmine framework"
+	- You can check the code coverange and disable some test
+	
+6) ng e2e
+	- this cli will run over all the end to end tests in the project
+	- inside e2e folder, xxx.e2e-spec.ts are end to end test scripts
+	- e2e are ran by protractor 
+
+7) ng update
+	- if you are using an older angularJS version, you can use this clic to update to the most recent version
+
+8) ng build
+	- build and generate the output of the application
+	- compiled javascript code
+	- this is mainly used for promting code to higher environments
+	- generated code is located in /disc folder
+
+9) ng lint
+	- code syntax linting (checking)
+	- set the rule about how code should be written in tslint.json
+	  coding standards
+	- it check if the code are following the standards
+
+10) To terminate the cli, use Ctrl+ C
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: Data Binding
+1. Data Binding Definition:
+	- it is bind data 
+		-from component view (xxx.component.html) to controller (xxx.component.ts)
+		or
+		-from component controller (xxx.component.ts) to view (xxx.component.html)
+
+2. Types of Data Binding	
+	- One way data binding (data flow only one direction)
+		- Controller to View (from xxx.component.ts to xxx.component.html)
+		  ***View get Data from Controller
+			- Interpolation : define a variable in the controller, and reference its value in the view
+				-Syntax: {{variable}} (use {{}} to reference the variable defined in the controller)
+					-for example:
+					 <h1>{{title}}</h1>
+				
+			- Property Binding : reference the variable in controller in the html element property
+				-Syntax: [property]="variable" (variable is defined in controller)
+				         [property]="'expression'" (expression is a static expression)
+					-for example:
+					 <input [placeholder]="placeholderVariable" />
+					 <input [placeholder]="'this is a placeholder value'" />
+					 <div [ngStyle]="{'color':colorVariable, 'background-color':bgcolorVariable}">[ngStyle] test</div>
+					 <div [ngClass]="['one','two']">[ngClass]: this are multiple static class names</div>
+
+
+			- Attribute Binding : attribute is a user-defined, custom property, and prefixed by attr. (syntax: attr.attribute_name)
+				-Syntax: [attr.attribute_name] = "variable" (variable is defined in controller)
+						 [attr.attribute_name] = "'expression'" (expression is a static expression)
+					-for example:
+					<a [href]="urlValue" [attr.myUrl]="attributeVariable">Attribute binding</a>
+					<a [href]="urlValue" [attr.myUrl]="'http://mytest.com'">Attribute binding</a>
+	
+		- View to Controller (from xxx.component.html to xxx.component.ts)
+		  ***Controller get Data from View
+			- Event Binding: bind the event of element in view to controller
+				-Syntax: (event_name)="function()" (you need to define a function to bind to the even pass in)
+					-for example:
+					 <button (click)="onClick()">Event Binding</button>
+					 (you need to define a function onClick() in the controller for the event click passed from the view)
+			
+	-Two way data binding (data flow from view to the controller, and flow back to the view later)
+			** In order to use the two way binding with ngModel, you need to import the FormModel in the parent Model of this component.
+			   import {FormsModule} from '@angular/forms';
+        	-Syntax: [(ngModel)] = "variable" 
+					-The variable is defined in the controller
+					-The data in the element within the view is passed to the variable
+					-The data of variable can be accessed by view by using interpolation/property binding/attribute binding
+			-for Example
+				<input [(ngModel)]="firstname">
+				<br>
+				<div>
+					{{firstname}}
+				</div>
+				
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+				
+Tutorial: Directives
+
+1. Type of Directives
+	- Structural Directives: 
+		- These directives change the structure (elements) of the view (html)
+		- *ngIf, *ngFor, *ngSwitch
+		
+	- Attribute Directives
+		- [ngClass], [ngStyle]
+	
+
+2. ngIf : *ngIf
+	-*ngIf : 
+		-syntax:  *ngIf="condition", 
+	     when condition is true, show the content, otherwise show hide it.
+		-example:
+		 <div *ngIf="showMe">*ngIf show me block</div>
+		 (When showMe is true, then show the block)
+	
+	-*ngIf with else statement : 
+		-syntax:  *ngIf="condition ; else elseBlock"
+			(you need to define the elseBlock by using <ng-template>)
+		    when condition is true, show the cotent, else, show the <ng-template> block elseBlock
+		- example:
+		<div *ngIf="showMe ; else elseBlock">*ngIf show me block</div>
+		<ng-template #elseBlock>
+			<div>*ngIf with else block</div>
+		</ng-template>
+		(When showMe is true, then show the block, else show the <ng-template> elseBlock)
+	
+	- *ngIf with then and else statement :
+		-syntax:  *ngIf="condition ; then thenBlock ; else elseBlock" 
+			(you need to define he thenBlock and elseBlock by using <ng-template>)
+		  when condition is true, then show the thenBlock, else show the elseBlock
+		- example:
+		<div *ngIf="showMe ; then thenBlock ;else elseBlock"></div>
+		<ng-template #thenBlock>
+			<div>*ngIf then block</div>
+		</ng-template>
+		<ng-template #elseBlock>
+			<div>*ngIf else block</div>
+		</ng-template>
+		(When showMe is true, then show the <ng-template> thenBlock, else show the <ng-template> elseBlock)
+		
+3. ngSwitch: [ngSwtich] - *ngSwitchCase - *ngSwitchDefault
+	- it has three elements:
+		- [ngSwitch] : it contain the expression
+		- *ngSwtichCase: it contain a value to match the above expression, if condition match then run 
+		- *ngSwitchDefault: if all the above *ngSwitchCase dont match, then run it
+	- example:
+		<div [ngSwitch]="expression">
+			<div *ngSwitchCase="1">The value is 1</div>
+			<div *ngSwitchCase="2">The value is 2</div>
+			<div *ngSwitchCase="3">The value is 3</div>
+			<div *ngSwitchCase="4">The value is 4</div>
+			<div *ngSwitchDefault>The value is default </div>
+		</div>
+		
+4. ngFor: *ngFor
+	-loop through a array
+	-syntax: *ngFor = "let element of array"
+	-it provide local variables of the array data
+		-index : get the current index of the current element in array
+		-first: return true if current element is the first element in array
+		-last: return true if current element is the last element in array
+		-even: return true if current index is the even index in array
+		-odd: return true if current index is the odd index in array
+		-syntax: *ngFor="let element of array ; index as i ; first as f; last as l; odd as o ; even as e"	
+		
+	-exmaple: fetch data from array, and render them in a table along with the array variables (index, first, last, odd ,even)
+		<table class='table'>
+		  <tr>
+			<th>Index</th>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>isFirst</th>
+			<th>isLast</th>
+			<th>isOdd</th>
+			<th>isEven</th>
+		  </tr>
+		  
+		  <tr *ngFor="let element of content ; index as i ; first as f; last as l; odd as o ; even as e">
+			<td>{{i}}</td>
+			<td>{{element.id}}</td>
+			<td>{{element.name}}</td>
+			<td>{{element.email}}</td>
+			<td>{{f}}</td>
+			<td>{{l}}</td>
+			<td>{{o}}</td>
+			<td>{{e}}</td>
+		  </tr>
+		</table>
+	
+
+5. ngStyle : [ngStyle]
+	- it is used to dynamicly set the style attribute of the DOM element.
+	- Syntax: 
+		- use static value: [ngStyle]="{'style-name1':'style-value1' , 'style-name2':'style-value2'}"
+			-for example:
+			 <div [ngStyle]="{'color':'red', 'background-color':'green'}">[ngStyle] test</div>
+		- use dynamic value: (the value of the style property is a variable defined in the class file)
+							[ngStyle]="{'style-name1':style-value-variable1,  'style-name2':style-value-variable2}"
+			-for example:
+			<div [ngStyle]="{'color':colorVariable, 'background-color':bgcolorVariable}">[ngStyle] test</div>
+
+6. ngClass : [ngClass]
+	- it is used to dynamicly set the class name of the DOM element.
+	-Syntax:
+		- use static class name:
+			- use one static class name: [ngClass]="'StyleClassName'"
+				- for example:
+				<div [ngClass]="'one'">[ngClass]: this is static class name</div>
+				(one is a css class)
+			 - use multiple class name: [ngClass]="['StyleClassName-1' , 'StyleClassName-2']" (the style class will be input as a array)
+				- for example:
+				<div [ngClass]="['one','two']">[ngClass]: this are multiple static class names</div>
+				(one and two are css classes, and they are input as a array)
+		
+		
+		- dynamicly use variable to reference class name:
+			- use one static class name: [ngClass]="StyleClassNameVariable" (StyleClassNameVariable is a variable defined in class)
+				- for example:
+				<div [ngClass]="oneVariable">[ngClass]: this is dynamic class name variable</div>
+				(oneVariable is a variable defined in class)
+			 - use multiple class name: [ngClass]="[StyleClassNameVariable-1 , StyleClassNameVariable-2]" (the style class variables will be input as a array)
+				- for example:
+				<div [ngClass]="[oneVariable,twoVariable]">[ngClass]: this are multiple dyunamic class names variable</div>				
+				(oneVariable and twoVariable are css variables, and they are defined in class, and input as a array)			
+				
+		- conditional expression 
+		[ngClass]={'className1':condition1, 'className2':condition2}
+		if condition1 is true, then use className1,
+		if condition2 is true, then use className2
+	
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+				
+Tutorial: Decorator
+
+1. Decorator is a (function return another function), 
+   it is used to pass (meta data)
+   In AngularJS, Decorator are start with @
+   
+2. Types of Decorators:
+	-Class Decorator [use to decorate class]      
+		: @NgModule (Module), @component (Component), @Injectable (Service), @Pipe (pipe)
+	-Property Decorator [use to decorate property] 
+		: @Input, @Output
+	-Method Decorator [use to decorate method]
+		: @HostListener
+	-Parameter Decorator [use to decorate method parameters]
+		: @Inject
+		
+3. The meta data in decorator can be either mandatory or optional
+	
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: Pipe
+1.Pile (|) is used to transform data from input to output 
+(define a object user in the controller, and bind it to the view to use the pipe)
+user = {
+		firstname: 'xu',
+		lastname: 'han',
+		age: 31,
+		birthday: '04/29/1982',
+		salary: 120000,
+		luckrate:0.8
+		};
+	
+2.Types of Piples:
+	-Buildin Piples: 
+			-lowercase: {{user.firstname | lowercase}}
+			-uppercase: {{user.lastname | uppercase}}
+			-date:      {{user.birthday | date}}
+			-currency:  {{user.salary | currency}}
+			-percent:   {{user.luckrate | percent}}
+			-json:      {{user | json}}
+			
+	-Parameter of pipe:
+			- use :param  for the parameter
+			- for example:     
+			 {{user.birthday | date:"MMMM:yy"}}
+			 {{user.salary | currency:"CAD"}}
+			 
+	-Chain pipe:
+		  you can chain multiple pipes togehter
+		  -for example:
+		       {{user.birthday | date:'MMMM.yy' | uppercase}}
+			   
+	-Custom Pipes:
+		
+		-Custom Pipe Definition
+			-custom pipe contains two files (xxx.pipe.ts, xxx.pipe.spec.ts)
+			-custom pipe class xxx.pipe.ts is decorated by @pipe decorator
+			-decorator @pipe will take meta data
+			{
+			name: 'pipe-name'
+			}
+			name: it will be used by the view to reference:  {{firstname | uppercase | pipe-name:param1:param2}}
+			
+		-Generate new Custom Pipe
+			- ng g pipe <pipe-name>
+			- after the pipe is created, its parent modules will be updated to declare this pipe , which this pipe belong to this logic group
+			  (so, where you generate the pipe is important, you must target a parent module first )
+			- In conclusion, after the above command:
+				-two files are created (xxx.pipe.ts, xxx.pipe.spec.ts)
+				-one file is updated (xxx.module.ts)
+				-you can trace the above information in the terminal
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: Component
+
+1. Component is a smaller function which can be reused multiple times in application
+   Smaller feature in bigger Module
+   for example:
+   Authentication Module, it include multiple small components.
+	-login component
+	-register component
+	-authenticate component
+	
+2. Component Definition
+    -Component contains three files (xxx.component.html, xxx.component.css, xxx.component.ts)
+	-Component class xxx.component.ts is decorated by @component decorator
+	-decorator @component will take meta data
+		{
+			selector: 'app-root',
+			templateUrl: './app.component.html',
+			styleUrls: ['./app.component.css']
+		
+		}
+		selector: it will be used by other parent components to reference
+		templateUrl or template : it is used to render the html view
+		styleUrs: it contains the css files for the view
+		
+
+3. AppComponent is the single most important component
+	- It is provided by default
+	- It is referenced in the index.html by using selector <app-root>
+
+
+4. generate component
+	- ng g component <component-name>
+	- after the component is created, its parent modules will be updated to declare this component 
+	  (so, where you generate the component is important, you must target a parent module first )
+	- In conclusion, after the above command:
+		-three files are created (xxx.component.html, xxx.component.css, xxx.component.ts)
+		-one file is updated (xxx.module.ts)
+		-you can trace the above information in the terminal
+
+5. you can include a child component in the parent component.
+	- if the child and parent components are belonging to the same module then continue to the next step, otherwise, do step 6 first
+	- find the selector of the child component, which in the meta data of the @component decorator of the xxx.component.ts 
+	- in the html of the parent component include the child component selector.
+	
+6. When you want to include a component from another module.
+	- Open the module xxx.module.ts of the parent component where you to use the child component
+	- find the module of the child component, and import it to the above module
+	- Then you can include that child component in the parent component now
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: Module
+
+1. Module is a logical group or container (it can contain components, services, routing-module, directives, pipes, etc)
+	-it represent a functionality by using different resources
+		-for example:
+		 -user module
+		 -login module
+		 -task module
+
+2. Module Definition:
+	- Module is a ts class (xxx.module.ts), decorated by decorator @NgModule
+	- Decorator @NgModule will take meta data:
+		{
+			declarations: [xxxComponent],
+			imports: [xxxModule],
+			exports: [xxxComponent],
+			providers: [services],
+			bootstrap: [xxxComponent]
+		}
+		declarations- A list of components included in this Module
+		imports - A list of modules used by this Module
+      **exports - A list of resources in this module you want to export to the external environment to use		
+		providers- A list services we want to added to this module
+		bootstrap- Specify the first component to load for this Module
+
+3. By default, every angular has at least 1 module (AppModule).
+	 And we need to import core modules (ngModule, browserModule, etc)
+
+
+4. generate module:
+	-ng g module <module-name>
+	** in order to use it in another module, it need to be imported by the module that use it
+5. generate a module with its routing module, and lazy loading
+	-ng g module <module-name> --route <module-route-name> --module <parent-module-name>
+		-1) it will create a new moudle <module-name>.module.ts
+		-2) it will create a new routing module <module-name>-routing.module.ts
+		-3) it will use the <parent-module-name> to locate the <parent-module-name>-routing.module.ts and add the a lazy loding route <module-route-name> to the <module-name>
+		
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: Lazy Loading -- feature Modules
+
+1. Every big angular application is made of many feature modules:
+	-for example:
+		-users (Module)
+			-view-user (component)
+			-update-user (component)
+		-orders
+		-vendors
+		-inventory
+
+
+2. By defualt, all modules are loaded when App is loaded.
+	- It load modules you dont need
+	- It make the package big
+	- It is slow in performance
+
+3. Lazy loading
+	- A design pattern that the module is loaded on request
+	- load modules when they are required on demand
+	- loadChildren : [()=>import().then(data=>data.loadModule)]
+
+4. How to do the lazy loading for feature modules, the concept
+	Step1: Create feature module:
+		-child routing module
+		-components
+	Step2: Configure the app-routing.module to 
+		add a route to this feature moudle by using loadChildren
+
+
+
+5. Implemention instruction:
+
+ng g module <module-name> --route <route-name> --module <parent module name>
+- create a module by the name <module-name> (<module-name> .module.ts)
+- create a routing module by the name  (<module-name> .routing.module.ts) 
+- find the <parent module name>-routing.module.ts and add a lazy loading route <route-name> to the module <module-name>
+
+Example:
+ng g module orders --route orders --module app
+	
+output 
+CREATE src/app/orders/orders-routing.module.ts (344 bytes)
+CREATE src/app/orders/orders.module.ts (349 bytes)
+CREATE src/app/orders/orders.component.html (21 bytes)
+CREATE src/app/orders/orders.component.spec.ts (626 bytes)
+CREATE src/app/orders/orders.component.ts (275 bytes)
+CREATE src/app/orders/orders.component.css (0 bytes)
+UPDATE src/app/app-routing.module.ts (1489 bytes)
+
+	
+6. Afterward:
+
+After you create a feature module, for example, orders.module
+
+1) If you want to use it in the app.module, you need to import the orders.module in the app.module.
+
+2) If you want to use the component of orders.module in the component of app.module, after do the step 1, 
+inside order.module.ts, @NgModule meta data, you need to export the component you want to use outside.
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+
+Tutorial: Service
+
+1. Dependency Injection (DI)
+	- DI is a design pattern which is used to dynamically providing dependencies
+	- service are reusable class which can be shared between components
+	- service and dependencies can be DI in the runtime
+	- If we want to use service in the component, we need to inject it.
+	- use decorator for service @Injectable
+
+2. introduction to Service
+	- Services are used for reusing common function
+	- Service is singleton
+	- ** Unlike component, service dont need to include in module, you can generate services in any folder, but it is good to keep service togehter
+	- Import and Inject service into component is called "DI"
+	- Service is a javascript class
+	
+3. Service Definition:
+	- file name is xxx.service.ts
+	- Service class is decorated by @Injectable decorator
+			@Injectable({
+			  providedIn: 'root'
+			})
+	- @Injectable means, this class is a service, and can be injected into components.
+	
+	
+	
+4. How to implement
+		- you can generate service in any folder
+		- ng g service <service-name>
+		
+		
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tutorial: Interceptors
+
+1. Introduction:
+	- Interceptor is the middle layers between the client (request) and server (response)
+	- When client sent a request to server, the request will go through the interceptor first, then go to the server
+	- When server sent a response to client, the response will go through the interceptor first, then go to the client
+	
+2. usecase:
+	- provide logging feature for request and response
+	- global error handling
+	- tracking processing status
+	
+	
+3. Interceptor Definition:
+	- file name is xxx.interceptor.ts
+	- Interceptor class is decorated by @Injectable decorator
+			@Injectable()
+	
+4. How to implement and use
+		1) create the new interceptor
+			- you generate interceptor in any folder
+			- ng g interceptor <interceptor-name>
+		2) Include the interceptor in the App module's providers
+			- go to app.module.ts, and add the interceptor class in the providers list
+			-   providers: [
+						{ provide: HTTP_INTERCEPTORS, useClass: LoginprocessInterceptor, multi: true }
+						],
+		
+		
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tutorial: Route Guard 
+
+1. route guard is used in the routes array object, to secure the route
+		-for example:
+		{path:'admin', component:adminComponent, canActivate: [your-route-guard]}
+
+2. the route guard contains the [authentication and authorization logics ] to check if the user is allowed to use the given route
+
+3. the route guard return boolean value (true or false)
+	-True : allowed to access route
+	-False: reject
+	
+4. How to implement 
+	- ng g guard <guard-name>
+	- while generating, it will ask you choose the guard interfaces to implement
+		-CanActivate
+		-CanActivateChild
+		-CanDeactivate
+		-Resolve
+		-CanLoad
+    - After the guard is created, add the authorizatoin and authetication logic inside and return true or false
+		- for example:
+					export class AdminGuardGuard implements CanActivate {
+									  canActivate(
+										route: ActivatedRouteSnapshot,
+										state: RouterStateSnapshot):boolean {
+										  /*
+										  Authoriazation and Authentication logic here 
+										  */
+										return true;
+									  }
+									}
+
+	- in the routing module, pick the route object you want to secure and add the guard in the array.
+		- for example
+		{path:"admin", component:AdminComponent, canActivate:[AdminGuardGuard]},
+		
+	- if the guard return true, it will allow you go navigate to the route, otherwise, it will do nothing
+	
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial Routing
+
+1. Intruduction of Routing
+	- All the paths/routes/navigation in Angular are handled by Angular Router package
+	- We navigage from one component view to the other by using the routes/navigation
+	- We can configure many types of routes/navigation
+		- default routes: {path:"product", component:xxxComponent} or {path:"product", redirectTo:'anotherpath',pathMatch="full"}
+		- child routes: {path:"product", children:[{path:"",component:productComponent},{path:"view",component:productViewComponent}]}
+		- wild card routes: {path:"**", component:xxxComponent} 
+		- query params routes
+		- url segments routes {path:"product/:id1/:id2", component:productComponent}
+		- lazy loading routes
+	- We create a routes array to contains the above routes in the [routing-module], so whenever user request a route, it will search in the routes array
+	- Router is singleton- it means there is only one instance of Angular router per application instance.
+	
+2. Routing Strategy 
+	- Routing Stratgy is very important, and it is how the end user to see the url
+		-examples:
+				/home
+				/products
+				/product/10
+				/product/10/details
+				/product/?search=param1
+			
+	- Two routing strategies are avilable (PathLocationStrategy, HashLocatoinStrategy)
+		- By default, all Angular apps are using PathLocationStrategy.
+		- Example of PathLocationStrategy:
+			/home
+			/products
+			/product/10
+			/product/10/details
+			/product/?search=param1	
+		- Example of HashLocatoinStrategy:
+			/#/home
+			/#/products
+			/#/product/10
+			/#/product/10/details
+			/#/product/?search=param1
+		- We can choose any stragety, and there is no constraint or restriction
+		
+	- How to implement the HashPathStrategy
+		- In parent module, xxx-module.ts, 
+		  1)import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+		  2)In the @NgModule decorator meta data, providers
+		     providers: [
+						{provide: LocationStrategy, useClass: HashLocationStrategy}
+						],
+						
+3. Base HREF (specify the "app folder location" under the server)
+	- Introduction:
+		- Angular app must have a Base HREF, which is the "app folder locaiton" in the server
+		- Angular app is single page application, which only have one html page (index.html), and Base HREF is present in the index.html file <base href="/app_folder">
+		- The default Base HREF is always "/", which means it point to the root of the server, and by default it assume your app is in the server root folder.
+	
+	- Example and usecases:
+		- For example:
+			server: http://iamleohan.com/ (root folder)
+			When you want to deploy your app under
+			http://iamleohan.com/demo/ (app folder)
+			You need to specify the Base HREF in index.html as "/demo"
+	
+	- How to specify the Base HREF during buld and deployment?
+		- if you app is in the sub folder /demo under the root
+		- ng build --base-href="/demo"
+		- in the dist folder which generated by the above command, and in the index.html, the <base href = "/demo">
+	
+4. Routing Module: (central routes configuraiton file to maintains all routes [for example: app-routing.module.ts])
+
+	-generate routing module:
+		- By defualt, when you create the app (ng new app-name), it will ask you if to create the routing module,you can say yest to create.
+		- Or, you can create later by using (ng g module app-routing --flat-module="app")
+	-composition of routing module:
+		- We need to import the route class from router package:
+			**  import { Routes, RouterModule } from '@angular/router';
+
+		- We need to configure the route path arrays:
+			**  const routes: Routes = [];
+
+		- We need to configure the meta data of the @NgModule decorator
+			**  @NgModule({
+				  imports: [RouterModule.forRoot(routes)],
+				  exports: [RouterModule]
+				})
+					
+		- We need to export the routing module class, so the parent module can import it.
+			**  export class AppRoutingModule { }
+			
+		- Import the new created routing module in the AppModule.
+	
+5. Router outlet (a placeholder of output from route)
+	- Angular app must have router outlet
+	- Angular app can have more then one router outlet
+		- named router outlet
+	- Syntax is "<router-outlet></router-outlet>", it is used in the view (xxx.component.html) along with othe html structures
+	- Router outlet is the placeholder of the output of different routes
+		-for example:
+			define routes within the routing module, routes array, and for each route, point to a component.
+            the router-outlet will display the output of that component form the route.			
+
+6. routerLink vs href: (routerLink refresh content on <router-outlet>, href reload the whole page)
+	- <a routerLink="/products">Products</a>
+	- routerLink add a link to a router, which the output will be render in the <router-outlet>
+	- ** When trigger the route on the routerLink, it will only change the content in the <router-outlet>, the whole page stay the same with its state.
+	- ** But, whenever trigger the href, the whole page is getting reloaded, and the state will be lost.
+	
+
+7. Configure Routes in route array inside routing module(Add routes objects in the routes array within in the routing module, app-routing.module.ts)
+
+	- We can configure routes to redirect route for various paths/routes/navigation	
+		- path  :"path-name"
+		- component :  xxxComponent
+		- redirectTo : "path-name"
+		- pathMatch : "full"
+		- children : []
+		
+	- ** Configure static routes, path point to component: 
+		- {path:'products', component: xxxComponent}
+		- Setup:
+			- In routing module, app-routing.module.ts, add routes objects to routes array
+					const routes: Routes = [
+					  { path: 'products', component: ProductsComponent },
+					  { path: 'product-view', component: ProductViewComponent }
+					];
+			- when use [server-url]/path, it will point to the component, and the output will be display in the corresponding <router-outlet>
+	
+	- ** Configure parameterized routes, a route with dynamic parameters : 
+		- {path:'path/:id1/:id2', component: xxxComponent}
+		- define path with dynamic parameters, the syntax for parameter is (:id) which is attached to the path, can be multiple params
+		- Setup:
+			- In routing module, app-routing.module.ts, add routes objects to routes array
+					const routes: Routes = [
+					  { path: 'products/:id1/:id2', component: ProductsComponent },
+					];
+		
+			- In the component controller, ProductsComponent,access the param through a Promise from ActivedRoute 
+				- inject ActivatedRoute class in contructor
+				- activedRoute.params.subscribe(data=>{
+					// passing the param from path to the property
+					// bind the property to the view
+				})
+				
+				Examle in component controller:
+					  prop1 = "";
+					  prop2 = "";
+					  constructor(private activedRoute:ActivatedRoute) { 
+						activedRoute.params.subscribe(data=>{
+						  this.prop1 = data.id1;
+						  this.prop2 = data.id2;
+						});
+					  }
+	
+	
+	- ** Configure staic route along with "Query Parameters"
+		- {path: "search", component: xxxComponent}
+		- Query Parameter : It is [? with tag = value and &] (search?id=1&name=hanxu)
+		- Setup:
+			- In routing module, app-routing.module.ts, add routes objects to routes array
+					const routes: Routes = [
+					  { path: 'search', component: SearchComponent },
+					];
+					
+			- In the component controller , SearchComponent, access the query parameter through a Promise from ActivedRoute
+				- inject the ActivedRoute to the contructor
+				- activedRoute.queryParams.subscribe(data=>{
+					//data is the object that contains all the query parameters
+				})
+			
+			Example in component controller:	
+				  pid = '';
+				  pname='';
+				  pcountry='';
+				  constructor(private activedRoute:ActivatedRoute) {
+					this.activedRoute.queryParams.subscribe(data=>{
+					  this.pid = data['id'];
+					  this.pname = data['name'];
+					  this.pcountry = data['country'];
+					})
+				   }
+				   
+	- ** Configure route with redirectTo:
+		- { path: '', redirectTo: 'products', pathMatch: 'full' }
+		- { path: 'my', redirectTo: 'products'}
+		- When we want a route to be redirect to another route, we use the redirectTo as above!
+		- The empty path (path="") is the default route of the app, and empty path also require pathMatch="full",
+			so the syntax can be fixed for default path redirect: { path: '', redirectTo: 'products', pathMatch: 'full' }
+	
+	- ** Configure route with wildcard (**):
+		- {path:'**', component=NoFoundComponent}
+		- {path:'**', redirectTo:'notfound'}
+		- When user enter a route, and it can not be found in the route arrays, it will go to the wildcard(**) route
+			- wildcard(**) is usually goto a page or component for pageNotFound or handle anyelse 404 errors
+			- like the default clause in the swtich-case-default syntax.
+			- wildcard(**) route entry should be put on the end of the route array
+	
+	- ** Configure children routes:
+		- route can be configured as a tree structure.
+			-For example:
+				/people/
+				/people/view
+				/people/edit
+				/people/search
+			route people has chidren routes, which is a route array.
+			
+		- One route can has children routes, which means one parent route can have a route array which contain the children routes
+		-   {
+				path: 'people',
+				children: [{ path: "", component: PeopleComponent },   route : /people/
+				{ path: "view", component: PeopleviewComponent },      route : /people/view
+				{ path: "edit", component: PeopleeditComponent },      route : /people/edit
+				{ path: "search", component: PeoplesearchComponent }   route : /people/search
+				]
+			},
+		***** This is not a good pratice, we can use the lazy loading modules with routing-module to do the same 
+		
+	- In component controller navigate route
+		- Inject the Router in the controller contructor:
+			constructor(private router:Router)
+		- navigate to the route with parameters
+			this.router.navigate(['/route', { id1: value ,id2:value}]);
+			or 
+			this.router.navigate(['/route']);
+		
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+	
+
+Tutorial : Bootstrap
+
+1. Install Bootstrap for view design
+
+	- home page for bootstrap4: https://getbootstrap.com/docs/4.0/getting-started/introduction/
+	
+	- Steps:
+		- need to install bootstrap, popper, jquery
+		- 1) at the project folder run [npm i bootstrap popper --save]
+		- 2) refresh and check the folder [node_modules], it should has two new foldes [bootstrap] and [jquery]
+		- 3) in the angular.json under architect add the css and js entry, (jquery.js must be before bootstrap.js)
+                        "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap.min.css",
+                            "src/styles.css"
+                        ],
+                        "scripts": [
+                            "node_modules/jquery/dist/jquery.min.js",
+                            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+
+                        ]
+						
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tutorial: Template Driven FormsModule (ngForm, ngModel)
+
+1. Template Driven FormsModule
+	- We define the form elements, validations in the component view
+	- use two way data binding 
+		In the view
+		<form #formName="ngForm" (onSubmit)="onSubmit(formName)">
+		<input #fieldName="ngModel" name="fieldName" ngModel>
+		{{formName.value}}
+		{{fieldName.value}}
+
+
+2. Implement the Template Drive Form in 2 steps:
+	- Step1: import FormModule in the xxx.module.ts 
+	- Step2: create form in xxx.component.html 
+				- ngForm: in <form>
+							- add #formName="ngForm", formName is a data binding which can be accessed in the view and can use it to access all other elements 
+							- add (ngSbumit)="onSubmit(myform) as submit action handler and pass in the formName to the controller to access form data
+						-for example: 
+						** <form #myform="ngForm" (onSubmit)="onSubmit(myform)">
+				
+				- ngModel : in form element, for instance <input>, 
+							-add name="fieldName" ngModel #fieldName="ngModel"
+						-for example:
+						** <input name="myinputField" ngModel #myinputField="ngModel">					
+				
+
+			** two way binding:
+				-form: #formName="ngForm", you can access the form data throught formName in the view
+				-field: #fileName ="ngModel", you can access the field data throught the fieldName in the view
+			
+3. Example: create a simple user form 
+	- In parent module, xxx.module.ts, import the FormModule
+	- In the view, xxx.component.html, define the form html by using bootstrap
+	<div>
+	{{userEditForm.value}}
+	{{passwordField.value}}
+	{{emailField.value}}
+	</div>
+	<form #userEditForm="ngForm" (ngSubmit)="onSubmit(userEditForm)">
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" 
+			name="emailField" ngModel #emailField="ngModel">
+			
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" 
+			name="passwordField" ngModel #passwordField="ngModel">
+			
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1" 
+			name="checkedField" ngModel #checkedField="ngModel">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>		
+
+	- In the controller, xxx.component.ts, add the submit event handler onSubmit(userEditForm:NgForm), and retrive the field value from userEditForm
+		onSubmit(userEditForm: NgForm) {
+				console.log(userEditForm);
+				console.log(userEditForm.value);
+				console.log(userEditForm.value.emailField);
+				console.log(userEditForm.value.passwordField);
+				console.log(userEditForm.value.checkedField);
+			  }
+	
+4. TDF validations:
+	-Angular provide common validator on the view, required, minLength, maxLength, etc
+	-Angular maintain the "state informations" for all forms
+		-ng-touched
+		-ng-untouched
+		-ng-dirty
+		-ng-pristine
+		-ng-valid
+		-ng-invalid
+		
+		
+	- Three ways for handling TDF validations
+		-1) use css to Hightlight the error elements
+		
+					input.ng-touched.ng-invalid {
+							border: 1px solid red;
+						}
+		
+		-2) disable the submit button: data binding button property disabled with form's valid value
+			<button type="submit" [disabled]="!formName.valid">
+			
+		-3) use two way databinding to get the data of field, and show caption message when status is invalid
+			emailField is two way binding
+			<input name="emailField" ngModel #emailField="ngModel">
+			<small*ngIf="emailField.touched && !emailField.valid">Please Enter Valid Email</small>
+
+	
+	
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tutorial: Reactive Forms (Dynamic Forms)
+
+1. Introduction to Reactive Form:
+	- We design the form elements, validations, user-intercactions in the component controller class.
+	- We use formGroup and formControl modules
+	- We need to import the ReactiveFormModule in the parent module xxx.module.ts 
+
+2. Implement the Reactive Form in 5 steps:
+	-Step1: Import the ReactiveFormModule in the parent Module of your form component, xxx.module.ts
+		- import { ReactiveFormsModule } from '@angular/forms';
+
+	-Step2: create the from in the component view (xxx.component.html)
+			-formGroup:  in <form>, add the property binding [FormGroup]="xxxForm" (Which wll be binded to the propery xxxForm in the controller)
+			
+			-formControlName: in form element, for instance, <input>, add the property formControlName = "formFieldName" (which is the name of this element inside the formGroup)
+			
+	-Step3: In the component controller (xxx.component.ts), 
+		- import FormGroup, FormControl, FormBuilder
+			for example: import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+		
+		- add the from property binding field in the controller
+			for example: 	xxxForm: FormGroup;
+			
+	-Step4: In the component controller (xxx.component.ts),
+		- Inject the FormBuilder in the constructor (FormBuilder is used to build the xxxForm)
+			-for example: constructor(private formBuilder: FormBuilder)
+				
+
+	-Step5: In the component controller (xxx.component.ts), the constuctor:
+		- create the FormGroup instance by using FormBuilder, and assigned to the property field this.xxxForm
+		- In the formBuilder, we create a group of FormControl elements, and the key-name should be as same as the formControlName for each elements in the view
+		
+		- for example:
+			  orderForm: FormGroup;
+			  constructor(private formBuilder: FormBuilder) { 
+				this.orderForm = formBuilder.group({
+				  emailField: [''],
+				  passwordField: ['']
+				});
+			  }
+			  
+	**** FormBuilder******
+	build and return a FromGroup
+	formBuilder.group({
+	....
+	})
+	
+	build and return a FormArray
+	formBuilder.array({
+	....
+	})
+		
+3. code example:
+	-view:
+	    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+			<div class="form-group row">
+				<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+				<div class="col-sm-10">
+					<input type="email" class="form-control" id="inputEmail3" placeholder="Email" formControlName="emailField">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="inputPassword3" placeholder="Password" formControlName="passwordField">
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-10">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</div>
+		</form>
+		
+	-controller:
+	
+		  orderForm: FormGroup;
+		  constructor(private formBuilder: FormBuilder) { 
+			this.orderForm = formBuilder.group({
+			  emailField: [''],
+			  passwordField: ['']
+			});
+		  }
+		  onSubmit() {
+			console.log(this.orderForm);
+			console.log(this.orderForm.value);
+			console.log(this.orderForm.value.emailField);
+			console.log(this.orderForm.value.passwordField);
+		  }
+	
+4. Reactive Form validations:
+	-Angular maintain the "state informations" for all forms
+		-ng-touched
+		-ng-untouched
+		-ng-dirty
+		-ng-pristine
+		-ng-valid
+		-ng-invalid
+	- component controller can use Validators class for different validation:
+		- Validators.required
+		- Validators.requreTrue
+		- Validators.maxLength(xx)
+		- Validators.minLength(xx)
+		- Validators.email
+		
+	- How to implement the validators
+		- Step1: In the component controller, import the Validators		
+				import { FormGroup, FormControl, FormBuilder , Validators} from '@angular/forms';
+		
+		- Step2: Modify the FormControls definition in the FormBuilder.group(), contructor.
+			- for the formControl which require Validators, attach a array of validators inside the definition.
+			- for exmaple:
+				emailField: ['', [Validators.required, Validators.email, Validators.minLength(3), Validators.maxLength(20)]],
+
+
+		
+		
+	- Three ways for handling Reactive validations
+		-1) use css to Hightlight the formControl which has errors
+		
+					input.ng-touched.ng-invalid {
+							border: 1px solid red;
+						}
+		
+		-2) disable the submit button: When form is invalid
+			<button type="submit" [disabled]="!xxForm.valid">
+			
+		-3) show error message when the formControl trigger an error
+			emailField is two way binding
+			
+			    <div>
+                    <small class="form-text text-muted" *ngIf="orderForm.get('emailField').touched && orderForm.get('emailField').hasError('required')">
+                        Please Enter Email</small>
+
+                    <small class="form-text text-muted" *ngIf="orderForm.get('emailField').touched && orderForm.get('emailField').hasError('email')">
+                        Please Enter a Valid Email</small>
+
+                    <small class="form-text text-muted" *ngIf="orderForm.get('emailField').touched && orderForm.get('emailField').hasError('minlength')">
+                        Please Enter Email longer min length</small>
+
+                    <small class="form-text text-muted" *ngIf="orderForm.get('emailField').touched && orderForm.get('emailField').hasError('maxlength')">
+                        Please Enter Email shorter than max length</small>
+                </div>
+
+
+
+5.FormGroup: ([GetValue], [SetValue, PatchValue], [Reset Form])
+	- Get value
+		// get the (FormGroup object)
+		console.log(this.orderForm);
+
+		// get the FormGroup object first, then get the value object
+		console.log(this.orderForm.value); 
+
+		// get the individual form control value
+		console.log(this.orderForm.value["emailField"]); 
+		console.log(this.orderForm.value.emailField); 
+
+		// get the (FormGroup object) frist, and then retrieve the individual (FormControl object)
+		console.log(this.orderForm.get("emailField"))
+		// get the value from (FormControl object)
+		console.log(this.orderForm.get("emailField").value)
+	
+
+	- Set Value vs Patch Value (FormGroup)
+
+		//FormGroup.setValue({
+			FormControlName:value,
+			....
+			FormControlName:value
+		})
+		It is used to set the values of all the FormControls, if some FormControl is missing, then it will return a error.
+		
+		//FormGroup.patchValue({
+			FormControlName:value,
+			....
+			FormControlName:value
+		})
+		It is used to change some FormControl value in the FormGroup.
+	
+	
+			-Example:
+			  onSetValue(){
+				this.orderForm.setValue({
+				  emailField: 'iamleohan@gmail.com',
+				  passwordField: '12345'
+				});
+			  }
+
+			  onPatchValue(){
+				this.orderForm.patchValue({
+				  emailField: 'iamleohan@gmail.com',
+				});
+			  }
+
+	
+	- reset/clear all FormControl
+		//it will clear all FormControl's value in the FormGroup.
+		FormGroup.reset()
+		
+			-Example:
+			  onReset(){
+				this.orderForm.reset();
+			  }	
+			  
+			  
+		
+6. FormGroup/FormControl: valueChanges: Angular keep tracking the value changes in the FormGroup, FormControl in real time.
+	
+	- valueChanges is a property of AbstractControl
+	- FormGroup, FormControl, FormArray extends AbstractControl, so valueChanges is a property of FormGroup , FormControl, FormArray
+	- Whenever there is a value change in the FormGroup/FormControl, valueChanges(Observable) will emit a event
+	- valueChanges return an Observable, and whenever you have an Observable, you need to subscribe it and operate on the data
+		(observable).subscribe(data=>{ operate(data)})
+	- The realtime changed value data will be in the subscribe callback method, you can work on that data.
+	
+	- Example:
+		a formControlName = "emailField" in the FormGroup(orderFrom)
+		In the component controller
+			1) define a string property emailfFieldValue and use it in the subscribe method
+		
+			2) in the onInit() method 
+			//subscribe the FormControl value changes
+		    this.orderForm.get('emailField').valueChanges.subscribe(data => {
+			  this.emailFieldValue = data;
+			})
+			//subscribe the FormGroup value changes
+			this.orderForm.valueChanges.subscribe(data => {
+			  console.log(data);
+			})	
+			
+			3) you can then use this realtime value property this.emailFieldValue on both view and controller
+
+	
+7. FormGroup/FormControl: statusChanges: Angular keep tracking the validation status changes in the FormGroup, FormControl in real time.
+	
+	- statusChanges is a property of AbstractControl
+	- FormGroup, FormControl, FormArray extends AbstractControl, so statusChanges is a property of FormGroup , FormControl, FormArray
+	- Whenever there is a validation status changes in the FormGroup/FormControl, statusChanges(Observable) will emit a event
+	- statusChanges return an Observable, and whenever you have an Observable, you need to subscribe it and operate on the data
+		(observable).subscribe(data=>{ operate(data)})
+	- The realtime status data will be in the subscribe callback method, you can work on that data.
+	
+	- Example:
+		a formControlName = "emailField" in the FormGroup(orderFrom)
+		In the component controller
+			in the onInit() method 
+			1)
+			// track the validation status in realtime for FormControl, emailField
+		    this.orderForm.get('emailField').statusChanges.subscribe(data => {
+			  console.log(data);
+			})
+			
+			2)
+			// track the FormGroup validation status in realtime
+			this.orderForm.statusChanges.subscribe(data => {
+			  console.log(data);
+			})
+
+
+8. FormArray: an array of FormControls or FormGroups
+
+   - FormArray: [FormControl, FormControl, ..., FormControl] or [FormGroup, FormGroup, ..., FormGroup]
+   
+   - The status of FormArray is valid only if all FormControls and FormControls are valid.
+
+   - In the view, the FromArray is identified as FormArrayName ="xxxx"
+   - In the view, the FromArray and its items should be wrote as :
+		** we usually use a tree structure to represent the FormArray in the view
+		
+		Array of controls: FormArrayName="" -> [FormControlName]
+		<div formArrayName="myFormControlArray">
+			<div *ngIf="let item of xxx ; let i=index"> xxx is the array from the controller
+				<input [formControlName]="i">
+			<div>
+		</div>
+
+		Array of group: FormArrayName="" -> [FormGroupName] -> formGroupName, .. , formGroupName
+		<div formArrayName="myFormControlArray">
+			<div *ngIf="let item of xxx ; let i=index" [formGroupName]="i"> xxx is the array from the controller
+				<input formControlName="x">
+				<input formControlName="xx">
+				<input formControlName="xxx">
+			<div>
+		</div>	
+		
+	- For example:
+			Design a reative form and the form has the following structure:
+			
+			salesform:
+				- formControl
+				- formArray:
+					-formGroup
+					-formGroup
+				- formArray:
+					-formControl
+					-formControl
+			
+			In component controller:
+			
+				  salesForm: FormGroup;
+				  constructor(private formBuilder: FormBuilder) {
+					this.salesForm = formBuilder.group({
+					  emailControl: ['iamleohan@gmail.com'],
+					  groupItems: formBuilder.array([
+						formBuilder.group({
+						  firstName: ['leo'],
+						  lastName: ['han']
+						}),
+						formBuilder.group({
+						  firstName: ['yu'],
+						  lastName: ['min']
+						})
+					  ]),
+					  controlItems: formBuilder.array([
+						['leo'],
+						['han']
+					  ])
+					});
+				  }
+			   
+
+			In component view:
+			
+				<form [formGroup]="salesForm">
+				<!--FormControl -->
+					<div class="form-group">
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" formControlName="emailControl">
+					</div>
+
+				<!--FormArray: FormGroup -->
+					<div class="container" formArrayName="groupItems">
+						<div class="row" *ngFor="let item of salesForm.get('groupItems').value ; let i = index" [formGroupName]="i">
+							<div class="col">
+								<label for="formGroupExampleInput">Item {{i}}:</label>
+							</div>
+							<div class="col">
+								<input type="text" class="form-control" placeholder="First name" formControlName="firstName">
+							</div>
+							<div class="col">
+								<input type="text" class="form-control" placeholder="Last name" formControlName="lastName">
+							</div>
+						</div>
+					</div>
+
+				<!--FormArray: FormControl -->
+					<div class="container" formArrayName="controlItems">
+						<div *ngFor="let item of salesForm.get('controlItems').value; let i=index">
+							<input type="text" [formControlName]="i">
+						</div>
+					</div>
+				</form>
+
+
+			**Important point**
+			The design of the view should be followed the content of the form in the controller
+	
+
+	- setValue/patchValue/reset
+		
+		-it is similar to the controlForm, you can go to the formArray first, then use the above method
+		-for details, check section 5
+		
+9. Add & Remove rows in FormArray
+	- you can treat the FormArray as an regular js array
+	- Add item in FormArray: formArray.push(item)
+	- Remove item from FormArray: formArray.removeAt(itemIndex)
+	
+	
+	Steps: All operations should be within the component controller
+		-1) create method to get the FormArray, and make sure the return type is FormArray
+		-2) create add method: formArray.push(item)
+		-3) create remove method: formArray.removeAt(itemId)
+		
+	code example:
+	
+	//add&remove FormArray of FormControls
+	
+		  getFormControlItems(): FormArray {
+			return this.salesForm.get('controlItems') as FormArray
+		  }
+		  
+		  onAddFormControl() {
+			let formArray = this.getFormControlItems();
+			formArray.push(
+			  new FormControl('', [Validators.required])
+			);
+		  }
+		  
+		  onDeleteFormControlById(itemId) {
+			let formArray = this.getFormControlItems();
+			formArray.removeAt(itemId);
+		  }
+		  
+	//add&remove FormArray of FormGroups
+	
+		  getFormGroupItems(): FormArray {
+			return this.salesForm.get('groupItems') as FormArray
+		  }
+		  
+		  onAddFormGroup() {
+			let formArray = this.getFormGroupItems();
+			formArray.push(this.formBuilder.group({
+			  firstName: [],
+			  lastName: []
+			}));
+		  }
+		  
+		  onDeleteFormGroupById(itemId) {
+			let formArray = this.getFormGroupItems();
+			formArray.removeAt(itemId);
+		  }
+
+
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial : Observable  [Observerable ----- > Observer(subscriber)] for an element, when the data change, we track it
+ 
+ ******* Observable subscribe to Subscribers
+
+1. Observable is part of the RxJS library
+
+2. import Observable into component where we want to use it 
+
+3. Observable is a sequence of data that is emitted over time, and the data can be any type (string , literal , event, etc)
+
+4. Angular use Observable in most async operations
+	- HTTP
+	- Routing
+	- Event Handling
+	
+5. In order to listen and track the changes of Observable, we need Observer(subscriber)
+	- Observer(subscriber) will continously track the changes in Observable
+	- Observer(subscriber) has many methods
+		- next(data)
+		- error()
+		- complete()
+	- Observable need to subscribe to Observer(subscriber) for use
+	- subscribe is : process the data sent by the observable over a period of time
+	- one Observable can subscribe to many Observers (subscribers) 
+	- one Observable can unsubscribe to an Observer(subscriber)
+	
+6. Implementation
+	- create observable variable: ob:Observable<any>
+	   ob = new Observable(subscriber => {
+			//some logics
+			subscriber.next(data);
+			//some logics
+			})
+	- the observable subscribe to subscriber (elements or variable) 
+	   ob.subscribe(data => {
+	   
+		element= data; // the observable's data is subscribe to the element
+		console.log(data)
+	   
+	   })
+	   
+	   
+7. Implementation example:
+		@Component({
+		  selector: 'app-shop',
+		  templateUrl: './shop.component.html',
+		  styleUrls: ['./shop.component.css']
+		})
+		export class ShopComponent implements OnInit {
+		  constructor() { }
+		  item: any;
+		  ob: Observable<any>;
+		  ngOnInit(): void {
+			this.ob = new Observable(observer => {
+			  setTimeout(() => {
+				observer.next('start');
+			  }, 2000);
+			});
+			this.ob.subscribe(data=>{
+			  this.item = data;
+			})
+		  }
+		}
+
+
+
+	
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+Tutorial: HTTP Client
+
+1. HttpClent: it is used to make request and process response of HTTP calls
+	- HttpClient make HTTP calls to server/api endpoints
+	- In order to use HttpClient, you need to import HttpClientModule in the app module
+		In app.module.ts:
+		import { HttpClientModule } from '@angular/common/http'
+		In your sevice: xxx.service.ts
+		inject the HttpClient into the service you want to use
+
+	- HttpClient usually is used in the service layer.
+	- HttpClient Methods
+		- get() : GET method call -> Read (CRUD Operation)
+		- post() : POST method call -> Create (CRUD Operation)
+		- put() : PUT method call -> Update (CRUD Operation)
+		- delete() : DELETE method call -> Delete (CRUD Operation)
+		- head()
+		- jsonp()
+		- options()
+		- patch()
+	- HttpClient method's response type is always Observable
+
+2. HttpClient-get(): CRUD-Read
+	- syntax: 
+		1) httpClient.get("api-endpoint-url")
+		2) can pass parameters as options (headers, params)
+		   httpClient.get("api-endpoint-url", {headers:httpHeaders, {}})
+		3) in some case, the api-endpoint-url contains an identifier to identify the resource to get
+
+	- The response type is Observable
+	- service call HttpClent.get(), and return an observable to the component
+
+3. HttpClient-post(): CRUD-Create
+	- syntax:
+		1) httpClient.post("api-endpoint-url",body)
+		2) can pass parameters as options (headers, params)
+		   httpClient.post("api-endpoint-url", body, {headers:httpHeaders, {}})
+
+	- The response type is Observable
+	- service call HttpClent.post(), and return an observable to the component
+
+
+
+4. HttpClient-put(): CRUD-Update
+	- syntax:
+		1) httpClient.put("api-endpoint-url",body)
+		2) can pass parameters as options (headers, params)
+		   httpClient.put("api-endpoint-url", body, {headers:httpHeaders, {}})
+		3) in some case, the api-endpoint-url contains an identifier to identify the resource to put
+
+	- The response type is Observable
+	- service call HttpClent.put(), and return an observable to the component
+
+
+
+5. HttpClient-delete(): CRUD-Delete
+	- syntax:
+		1) httpClient.delete("api-endpoint-url")
+		2) can pass parameters as options (headers, params)
+		   httpClient.delete("api-endpoint-url", {headers:httpHeaders, {}})
+		3) in some case, the api-endpoint-url contains an identifier to identify the resource to delete
+
+	- The response type is Observable
+	- service call HttpClent.delete(), and return an observable to the component
+
+
+6. HttpClient- headers:
+	- we can send headers through http call
+		-usecases:
+			"content-type":"application/json"
+			"Authorization":"xxxxx"
+			
+	- HttpClient headers use class HttpHeaders
+	- HttpHeaders is used by HttpClient(get(),post(),put(),delete())
+	- HttpHeaders class has following methods:
+		-append()
+		-set()
+		-get()
+		-getAll()
+		-has()
+		-keys()
+		-delete()
+		
+	- syntax:
+		How to create HttpHeaders
+		    let httpHeaders = new HttpHeaders({
+				  "content-type": "application/json",
+				  "Authrization": "fdsjflkdsjf;ldsjflkdsfjdsa"
+				});
+	- httpHeaders is immutable, once you create it (new HttpHeaders({})), then you can not modify it, 
+			when you want to add custom entries, you need to reassign it
+			httpHeaders = httpHeaders.set('myentry','myvalue');
+	- HttpHeaders dont allow duplicate entries
+	
+7. HttpClent- params:
+	- we can send parameters through http call
+		-usecases:
+			sending ids for PUT/DELETE api calls
+			http://localhost:4444/orders?id=1
+	- HttpClient params use class HttpParams
+	- HttpParams is used by HttpClient(get(),post(),put(),delete())
+	- HttpParams class has following methods:
+		-append()
+		-set()
+		-get()
+		-getAll()
+		-has()
+		-keys()
+		-delete()
+		-toString()
+		
+	- syntax:
+		How to create HttpParams
+			let httpParams = new HttpParams({
+			  fromObject: {
+				paramName1:value,
+				paramName2: [value1, value2, ... ,]
+			  }
+			});
+			
+		The url result is: http://xxxx/orders?paramName1=value&&paramValue2=value1&paramValue2=value2	
+	- httpParams is immutable, once you create it (new httpParams({})), then you can not modify it, 
+			when you want to add custom entries, you need to reassign it
+			httpParams = httpParams.set('myentry','myvalue');
+	- httpParams dont allow duplicate entries, you can use array with the same param name
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&	
+
+
+Test-Build-Deployment
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+Tutorial : Testing
+
+1. Augular Testing
+	- Angular support both Unit testing and E2E testing
+	- Angular native support Jasmine, Karma, and Protractor test framework, and can also use other framework like Cucumber
+		- We write unit test cases in Jasmine Framework
+		- We run unit test cases in Karma Framework
+		- We run E2E on Protractor Framework
+	- Angular CLI has builtin commands for Unit test and E2E test
+
+2. Angular Test Fundamentals
+	- Unit test and E2E test file name convention
+		- Unit test: 
+			filename end with .spec.ts
+			file can be anywhere, but its better the test file besides code file			
+		- E2E test:
+			filename end with .e2e.spec.ts
+			files are under /e2e folder
+			
+	- Test Frameworks and configuration
+		- Unit Test:
+			- Jasmine Framework: write script, Karma Framework: run script
+			- config file: /src/karma.conf.js
+		- E2E Test:
+			- Protractor Framework
+			- config file: /etc/protractor.conf.js
+			
+	- Things can do during testing
+		- code coverage reports (coverage reports are in /coverage folder)
+		- configure ports
+		- configure tests (skip tests)
+		
+	- main.ts and test.ts and angular.json
+		- main.ts
+			- starting point of app
+			- use platformBrowserDynamic to bootstrap/load the first module
+		- test.ts
+			- the test code to test main.ts
+		- angular.json
+			- configure the test and build
+			
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Tutorial- Build and Deployment
+
+
+1. Introduction:
+	- Angular Build:
+		-Build Steps:
+			- Compile the Angular app: check for syntax error, DI, metadata 
+			- Transpiling: TypeScript code is coverted into JavaScript, because Browser doesnt support TypeScript, it only support JavaScript
+			- The generated JS files are put into the output folder, by default is "/desc",  (you can specify as a param in ng build)
+		- The default build process can be configured later
+		- We can build single app or multiple apps in the same project
+	
+	- Angular Deployment:
+		- After build, we got the output file in "/desc" folder by default, and these files need to be deployed into server.
+		 Deployment is to move the files in the output folder to the server folder
+		
+		- Ways of Deployments:
+			- Manually deployment to server folder
+			- Automatically deployment
+				- need to use the build and deployment pipleline
+					- Bitbucket
+					- Jenkins 
+				- need to write scripts of command in the pipeline to deploy to the server
+		
+		- Most of the time, we deploy to "cloud"
+			- AWS
+			- Azure
+			- AliCloud
+			
+2. Build and Deploy single Angular app: ng build [--outputPath xxx] [--Base-href xxx]
+	- go to the workspace folder
+		- run command: ng build
+			- it will build and main app and all projects inside it
+			- you can specify the --outputPath param to specify another output folder instead of "desc"
+			- ng build --outputPath xxx
+		
+	- the compiled codes are in "desc", deploy them to server
+		- manual copy
+		- automatically deployment, pipeline
+		
+	--** <base href> in index.html is important, it must be point to the folder location in the server for different deployment.(the url should end with /,  http://localhost:80/myang/   or  /)
+		- you can specify the <base href> in build command
+		- ng build --baseHref xxxx
+		
+		- At the same time specify the --deployUrl as well
+	
+3. Deployment to Local XAMMP server
+	- local servers
+		-WAMP
+		-XXAMPP
+	- define baseHref: --baseHref=http://localhost:80/myang/ 
+	- define deployUrl: --deployUrl = http://localhost:80/myang/ 
+	- build: ng build --baseHref=http://localhost:80/myang/  --deployUrl = http://localhost:80/myang/ 
+	- install server XXAMPP, and find the server folder "htdocs", create your root folder "myang"
+	- put files in dest into myang
+	
+4. Configure Environments
+	- Different types of environments:
+		- local
+		- dev
+		- test
+		- stage
+		- production
+	
+	- folder for environment
+		- src/environments
+		- you can create environment files in that folder
+		- in environment file, you can add any number keys
+		
+	- Implementation guilde
+		- Step1: create the environment files in src/environments
+			- go to the src/environments folder
+			- create environment class file, environment.xxx.ts, xxx is the environment variable
+			- add key-values in the files
+			
+					for example:
+						export const environment = {
+						  production: false
+						};
+		
+		- Step2: add configurations in angular.json  for (build and serve)
+			- go to angular.json
+			
+			*******build*********
+			- go to projects -> "projectname" -> architect -> build -> configurations
+			- copy the section
+			                "production": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.prod.ts"
+                            }]}
+						and rename it with your predefined environments, for example
+							"dev": {
+                            "fileReplacements": [{
+                                "replace": "src/environments/environment.ts",
+                                "with": "src/environments/environment.dev.ts"
+                            }]}
+			
+			*******serve*********
+			- go to projects -> "projectname" -> architect -> serve -> configurations
+			- copy the section
+                        "production": {
+                            "browserTarget": "hansample:build:production"
+                        },
+						and rename it with reference to the above defined build configuration
+                        "dev": {
+                            "browserTarget": "hansample:build:dev"
+                        },
+							
+		- Step3: build based on the environment:
+			There are two ways to do this:
+				1) pass in the cli as a parameter
+					ng build --configuration=dev
+				
+				2) define the build command in the package.json
+				In package.json file:
+								
+				  "scripts": {
+					"ng": "ng",
+					"start": "ng serve",
+					"build": "ng build",
+					"test": "ng test",
+					"lint": "ng lint",
+					"e2e": "ng e2e"
+				  },
+				  
+				 update the value of build as "ng build --configuration=dev"
+				 
+		
+		- Step4: reference the envrionment content in code:
+			you need to import the environment file in your code 
+			
+			import {environment} from "./../environments/environment"
+			
+			the environment object will help you to reference all envrionment values
+			
+			
+			
+		
+****************************Projects*******************************
+
+Steps:
+
+1. create an empty ng project:
+	-ng new ngdemo
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	

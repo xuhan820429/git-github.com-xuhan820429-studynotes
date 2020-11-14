@@ -1,0 +1,53 @@
+sqlite3
+
+1. install and setup 
+	- download the zip and unzip
+	- add the sqlite3 folder in the PATH
+	- type cmd and check if sqlite3 is there
+	
+
+2. db operations:
+	- Create new datbase
+		sqlite3 name.db
+	- Create new table
+		CREATE TABLE users (id INTEGER, name VARCHAR, age INTEGER, email VARCHAR);
+	- Insert records
+		INSERT INTO users VALUES (1, 'LEO', 29, 'iamleohan@gmail.com');
+	- Query table
+		SELECT * FROM users;
+	- Drop table
+		DROP TABLE users;
+		
+		
+		
+3. sqlite3 shell commands; start with .
+	- type .help , to get all of them 
+	- .quit,  save and exit
+	- .tables, list all tables
+	- .headers on, enable all headers for query
+	- .schema tablename, show the schema of table
+	- .backup xx.db, create a backup of exiting bd
+	- .restore xx.db, restore the db by using a schema
+	- .seperator ',' , change the seperator between columns
+	- .mode, change the view mode of query output
+		- .mode csv, display the output as csv
+		- .mode tab, display the output as table
+		
+	- .output filename, it is use to collect all the following command output into a file "filename"
+		after type the above shell command, you should type some query for the output content
+		and once you finished, just type in .quit shell command 
+		
+		example:
+		>.mode csv
+		>.output result.csv
+		>SELECT * FROM users
+		>.quit
+		
+		Then the result.csv will be generated with all the query result in csv format
+		
+	
+	- .import filename tablename, load the content from csv file into table 
+	
+	
+	
+

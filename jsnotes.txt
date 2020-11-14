@@ -1,0 +1,66 @@
+Asynchronous JavaScript 
+
+promise +  sync + await
+//the function return a promise
+function process(input_data) {
+    return new Promise((resolve, reject) => {
+
+        let response = `${input_data}, has response`
+            /*
+            some logic here to get a response from 
+            another function
+            */
+        global.setTimeout(() => {
+            resolve(response);
+        }, 5000);
+
+    });
+}
+
+async function checkProcess() {
+	//wait the promise to return a response
+    // await must follow a promises	
+    let response = await process('leo han');
+    console.log(response)
+}
+
+
+#########################################################################################################
+Terms to use: callback, promise, async (async: when a function is marked as async, it is a promise), await(before promise, and return the response)
+
+Costom use:
+
+usecase1:
+
+1) define an aync function by using promise, callback, async, await
+async operation(callback){
+  let prom = new Promise((resolve, reject)=>{
+  xxxx
+  xxxx
+  xxxx
+  response = xxxx;
+  resolve(response)
+  });
+  
+  let response = await prom()
+
+  callback(response)
+}
+
+2) call the above method
+
+operation((data)=>{
+
+ console.log(data)
+})
+
+usecase2: define a async function which is a promise, and treat is as a promise
+
+example:
+const readFile = async(url) => {
+    let response = await fetch(url);
+    let data = await response.json()
+    return data
+}
+
+readFile("https://jsonplaceholder.typicode.com/todos/1").then(data=>{process(data)})

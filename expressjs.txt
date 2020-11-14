@@ -1,0 +1,183 @@
+expressjs
+
+a framework for nodejs webapp && api
+
+Steps:
+
+1. install the refreshable server 
+npm i nodemon  //a better rebuild server
+
+2. create node project
+npm init
+
+3. install expressjs
+npm i express
+
+4. create a server js file, server.js
+	- const express = require('express')
+	- const app = express()
+	- app.listen(portnum)
+	- app.get('xxx', (req,res)=>{
+	
+		handle the logic
+	})
+
+
+####################################################################################################
+route:
+route url always start with '/'
+
+1. basic route
+
+	app.get('/test', (req, res) => {
+    res.send('this is a test')
+	})
+
+2. router: extract routes for different resources into differnt router module files
+	define a router module and export the router
+		in /router/users.js
+
+				const express = require('express')
+				const router = express.Router()
+
+				router.get('/', (req, res) => {
+					res.send('xxx/users/')
+				})
+				router.get('/view', (req, res) => {
+					res.send("xxx/users/view")
+				})
+				router.get('/edit', (req, res) => {
+					res.send('xxx/users/view')
+				})
+
+
+				module.exports = router
+				
+		in the server.js , require the previous defined router module
+				const express = require('express')
+				const users_router = require('./router/users')
+				const app = express()
+
+				app.listen(3333, () => {
+					console.log('localhost listen on port 3333')
+				})
+
+				app.use('/myusers', users_router)
+				
+				
+3. dynamic route; pass parameter in the route
+	
+	- use :id to represent the parameter
+		for example /users/view/:id
+		
+	- in the (req,res) callback:
+		use req.params.pramname  to get the parameter value
+		
+	for exmaple:
+	
+		router.get('/list/:id', (req, res) => {
+			res.send(`list ${req.params.id}`)
+			})
+			
+4. user regrex in route:
+	attach an regex followed the :param, to make sure the param you passed in follow the sandard
+	
+	app.get('/test/:id([0-9]{2})', (req, res) => {
+    res.send(`this is a test ${req.params.id}`)
+	})
+	
+	the following url works: http://localhost:3333/test/21
+	
+5. wilds card route,  it is used to catch any 404 kinda request
+
+		app.use('*', (req, res) => {
+			res.send('404 error')
+		})
+
+
+####################################################################################################
+
+Middleware: 
+	
+	1. introduction;
+		- middleware is used to inject functions "before", "after", or "around" the specific route callback function.
+			the order is defined from top to bottom 
+			- 1)before:  request-> api ->[ middleware(req, res, next) -> callback(req, res)]
+			- 2)after:   request-> api ->[ callback(req, res, next) -> middleware(req,res)]
+			- 3)around:  request-> api ->[ middleware(req, res, next) -> callback(req, res, next) -> middleware(req, res) ]
+		- usage of middleware:
+			- security check (Auth)
+			- request body and header info parsing 
+			- logging 
+			- other operations that would be before, after, or around the callback.
+			
+	2. implementation
+		- use the app.use('/route-path', (req, res, next)=>{
+			/*
+			middleware logic
+			*/
+			next() // only exist before the api callback
+		})   before the api method
+		
+		- the next() is used to pass control to the next function.
+		- the next(error), the param in next is error
+		
+	
+	
+	
+	
+	example:
+	//middleware before
+		//this is the before middleware
+		app.use('/test', (req, res, next) => {
+			console.log('middleware before: "/test"')
+			next() // give control to the next
+		})
+		app.get('/test', (req, res) => {
+			console.log('this is for test')
+			res.send('this is for test')
+
+		})
+	
+
+	//middleware sample after:
+		app.get('/test', (req, res, next) => {
+			console.log('this is for test')
+			res.send('this is for test')
+			next()
+		})
+		
+		// this is the after middleware
+		app.use('/test', (req, res) => {
+			console.log('middleware after "/test"')
+		})
+
+
+	//middleware sample around-before:
+		app.use('/test', (req, res, next) => {
+			console.log('middleware around-before "/test"')
+			next()
+		})
+		app.get('/test', (req, res, next) => {
+			console.log('this is for test')
+			res.send('this is for test')
+			next()
+		})
+		//middleware sample around-after:
+		app.use('/test', (req, res) => {
+			console.log('middleware around-after "/test"')
+		})
+		
+####################################################################################################
+
+
+ExpressJs Generator:
+
+	1. Introduction:
+		- it generate the basic file structure for expressjs project
+		- npm i express-generator
+
+
+
+
+
